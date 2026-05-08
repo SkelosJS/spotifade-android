@@ -69,12 +69,17 @@ keyPassword=…
 
 1. Installer l'APK : `adb install -r app-release.apk` (ou copier le
    fichier sur le téléphone et l'ouvrir).
-2. Lancer SpotiFade.
-3. Appuyer sur **Accorder l'accès aux notifications** et activer
+2. **Sur Android 13 et plus, autoriser d'abord les paramètres
+   restreints** : *Paramètres → Applications → SpotiFade*, menu trois
+   points `⋮` en haut à droite, puis *« Autoriser les paramètres
+   restreints »*. Sans cette étape, le toggle d'accès aux notifications
+   sera grisé (protection Android contre les apps sideloadées).
+3. Lancer SpotiFade.
+4. Appuyer sur **Accorder l'accès aux notifications** et activer
    *SpotiFade* dans la liste système. Cette permission est ce qui
    débloque `MediaSessionManager.getActiveSessions` — aucune
    notification n'est lue ni stockée.
-4. La carte de statut passe au vert ("Actif"). L'app peut être fermée :
+5. La carte de statut passe au vert ("Actif"). L'app peut être fermée :
    le listener continue de tourner en arrière-plan, écran éteint inclus.
 
 Sur les surcouches agressives en gestion de batterie (Xiaomi/MIUI,

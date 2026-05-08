@@ -31,7 +31,7 @@ permission "Ne pas déranger".
 ## Build
 
 ```bash
-git clone https://github.com/skelos9692/spotifade-android.git
+git clone https://github.com/SkelosJS/spotifade-android.git
 cd spotifade-android
 ./gradlew assembleDebug    # APK debug : app/build/outputs/apk/debug/
 ./gradlew assembleRelease  # APK release : app/build/outputs/apk/release/

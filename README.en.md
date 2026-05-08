@@ -29,7 +29,7 @@ on `STREAM_MUSIC`. Both paths work without the Do Not Disturb permission.
 ## Build
 
 ```bash
-git clone https://github.com/skelos9692/spotifade-android.git
+git clone https://github.com/SkelosJS/spotifade-android.git
 cd spotifade-android
 ./gradlew assembleDebug    # debug APK: app/build/outputs/apk/debug/
 ./gradlew assembleRelease  # release APK: app/build/outputs/apk/release/

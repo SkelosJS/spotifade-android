@@ -2,77 +2,81 @@
 
 > *Trop de pub tue la pub.*
 
-Mute Spotify ads automatically on Android — no root required.
+🇬🇧 [Read in English](README.en.md)
 
-## How it works
+Coupe automatiquement le son des pubs Spotify sur Android — pas de root.
 
-A `NotificationListenerService` taps into the system `MediaSessionManager` and
-watches Spotify's media session metadata. When an ad is detected (via the
-`METADATA_KEY_ADVERTISEMENT` flag, a `mediaId` containing `spotify:ad`, or a
-localized ad title — `Annonce`, `Advertisement`, `Werbung`, …), the Spotify
-session is muted via `MediaController.setVolumeTo(0)`. As soon as the next
-track starts, the previous volume is restored.
+## Comment ça marche
 
-If the per-session route is unavailable (older Android, restricted device),
-it falls back to `AudioManager.adjustStreamVolume(ADJUST_MUTE)` on
-`STREAM_MUSIC`. Both paths work without `Do Not Disturb` access.
+Un `NotificationListenerService` se branche sur le `MediaSessionManager`
+système et surveille les metadata de la session media de Spotify.
+Lorsqu'une pub est détectée (via le flag `METADATA_KEY_ADVERTISEMENT`,
+un `mediaId` contenant `spotify:ad`, ou un titre localisé — `Annonce`,
+`Advertisement`, `Werbung`, …), la session Spotify est mutée via
+`MediaController.setVolumeTo(0)`. Dès que la piste suivante démarre, le
+volume précédent est rétabli.
+
+Si la voie par session est indisponible (Android plus ancien, appareil
+restreint), un fallback bascule sur `AudioManager.adjustStreamVolume(
+ADJUST_MUTE)` sur `STREAM_MUSIC`. Les deux chemins fonctionnent sans
+permission "Ne pas déranger".
 
 ## Build (CLI)
 
-Requires JDK 17 and the Android SDK with platform 35 + build-tools 35.
+Nécessite JDK 17 et le SDK Android avec la plateforme 35 + build-tools 35.
 
 ```bash
-./gradlew assembleDebug    # debug APK at app/build/outputs/apk/debug/
-./gradlew assembleRelease  # release APK at app/build/outputs/apk/release/
+./gradlew assembleDebug    # APK debug : app/build/outputs/apk/debug/
+./gradlew assembleRelease  # APK release : app/build/outputs/apk/release/
 ```
 
-### Signing your release
+### Signer ta release
 
-The release build looks for `keystore.properties` at the project root
-(gitignored). If absent, it falls back to the debug signing key — fine for
-local sideloading but not for distribution.
+Le build release cherche un `keystore.properties` à la racine du projet
+(gitignoré). En son absence, il bascule sur la clé de debug — OK pour
+sideload local, pas pour de la distribution.
 
-To set up your own signing key:
+Pour mettre en place ta propre clé de signature :
 
 ```bash
 keytool -genkey -v \
   -keystore release.jks \
-  -alias spotify-ad-mute \
+  -alias spotifade \
   -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-Then create `keystore.properties`:
+Puis crée `keystore.properties` :
 
 ```properties
 storeFile=release.jks
 storePassword=…
-keyAlias=spotify-ad-mute
+keyAlias=spotifade
 keyPassword=…
 ```
 
-## Setup on the device
+## Installation sur le téléphone
 
-1. Install the APK: `adb install -r app-release.apk`.
-2. Launch the app.
-3. Tap **Accorder l'accès aux notifications** and enable *SpotiFade*
-   in the system list. This permission is what unlocks
-   `MediaSessionManager.getActiveSessions` — no notifications are read or
-   stored.
-4. The card turns green ("Actif"). You can close the app — the listener
-   keeps running in the background, screen off included.
+1. Installe l'APK : `adb install -r app-release.apk`.
+2. Lance l'app.
+3. Appuie sur **Accorder l'accès aux notifications** et active
+   *SpotiFade* dans la liste système. Cette permission est ce qui
+   débloque `MediaSessionManager.getActiveSessions` — aucune
+   notification n'est lue ni stockée.
+4. La carte passe au vert ("Actif"). Tu peux fermer l'app — le listener
+   continue de tourner en arrière-plan, écran éteint inclus.
 
-On aggressive battery managers (Xiaomi/MIUI, Huawei, OnePlus…) you may need
-to disable battery optimization for *SpotiFade* so the system doesn't
-kill the listener in standby.
+Sur les surcouches agressives (Xiaomi/MIUI, Huawei, OnePlus…), il peut
+falloir désactiver l'optimisation de batterie pour *SpotiFade* afin que
+le système ne tue pas le listener en veille.
 
-## Debugging
+## Debug
 
 ```bash
 adb logcat -s SpotifyAdMute:V
 ```
 
-Per-metadata debug logs are stripped from the release APK.
+Les logs verbeux par metadata sont retirés de l'APK release.
 
-## License
+## Licence
 
-MIT — see `LICENSE`.
+MIT — voir `LICENSE`.
